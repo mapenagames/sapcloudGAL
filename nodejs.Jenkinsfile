@@ -1,11 +1,11 @@
 #!groovy
-env.GIT_CRED = "GitHubPusher" //Credenciales
+//env.GIT_CRED = "GitHubPusher" //Credenciales
 library(
     changelog: false,
     identifier: 'piper-lib-os@master',
     retriever: modernSCM([
         $class: 'GitSCMSource',
-        credentialsId: env.GIT_CRED,
+        //credentialsId: env.GIT_CRED,
         //remote: "https://github.com/SAP/jenkins-library.git"
         remote: "https://github.bancogalicia.com.ar/alm/jenkins-library.git"
     ])
