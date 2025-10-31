@@ -20,6 +20,8 @@ node() {
     stage('clone Repo') {
         script {
             cleanWs()
+            alm_VarsEnv()
+            alm_Utilidades.logRotator()
             println "stage 1"
             //alm_GitHub.cloneRepo(@
             sh " git clone https://github.com/mapenagames/sapcloudGAL.git"
@@ -35,6 +37,7 @@ node() {
         script {
             dockerExecute(script: this, dockerImage: 'python:3.10') {
                 sh '''
+                    
                     cd sapcloudGAL/python
                     pip install -r requirements.txt
                     uvicorn app:app --host 0.0.0.0 --port 8000
