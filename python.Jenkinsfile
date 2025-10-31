@@ -17,8 +17,8 @@ library(
     ])
 )
 
-// Usa piperPipeline en lugar de pipeline { }
-piperPipeline {
+// Declarative Pipeline estándar
+pipeline {
     agent any
 
     environment {
@@ -30,6 +30,25 @@ piperPipeline {
     }
 
     stages {
+        stage('Setup Piper') {
+            steps {
+                // Inicializa el entorno de Piper
+                setupCommonPipelineEnvironment script: this
+            }
+        }
+
+        stage('Clone Repo') {
+            steps {
+                echo "Clonando repositorio..."
+                sh 'git clone https://github.com/mapenagames/sapcloudGAL.git'
+                sh '''
+                    cd sapcloudGAL/python
+                    pwd
+                    ls -la
+                '''
+            }
+        }
+
         stage('Ejecutar en Python 3.10') {
             steps {
                 echo "Iniciando contenedor Python 3.10..."
@@ -38,18 +57,19 @@ piperPipeline {
                     dockerImage: 'python:3.10'
                 ) {
                     sh '''
-                        echo "=== Workspace ==="
+                        echo "=== Workspace en contenedor ==="
+                        cd sapcloudGAL/python
                         pwd
                         ls -la
 
-                        echo "=== Python ==="
+                        echo "=== Python version ==="
                         python --version
 
                         echo "=== Instalando requests ==="
                         pip install --no-cache-dir requests
 
-                        echo "=== Versión ==="
-                        python -c "import requests; print('requests:', requests.__version__)"
+                        echo "=== Versión de requests ==="
+                        python -c "import requests; print('requests version:', requests.__version__)"
                     '''
                 }
             }
