@@ -19,6 +19,7 @@ library(
 node() {
     stage('clone Repo') {
         script {
+            println "stage 1"
             alm_GitHub.cloneRepo()
             sh 'pwd'
             sh 'ls -all'

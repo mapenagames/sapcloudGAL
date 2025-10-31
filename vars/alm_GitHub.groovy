@@ -37,7 +37,7 @@ def getRepos(){
 }
 
 def cloneRepo() {
- 
+    println "clone repo"
     String branchOrTag = env.GIT_BRANCH ? env.GIT_BRANCH : "refs/tags/${env.GIT_TAG}"
     
     if( env.GIT_NOMBRE_REPO ) {
