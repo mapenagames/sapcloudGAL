@@ -24,7 +24,7 @@ node() {
             //alm_GitHub.cloneRepo(@
             sh " git clone https://github.com/mapenagames/sapcloudGAL.git"
             sh """
-               cd sapcloudGAL/python"
+               cd sapcloudGAL/python
                pwd
                ls -all
             """
