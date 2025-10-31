@@ -42,3 +42,40 @@ dockerExecute(
                 '''
             }
         }
+
+
+
+pipe
+library(
+    identifier: 'alm@main',
+    retriever: modernSCM([
+        $class: 'GitSCMSource',
+        remote: 'https://github.com/mapenagames/sapcloudGAL.git'
+    ])
+)
+
+stage('Ejecutar en Python 3.10  b') {
+            steps {
+                echo "Iniciando contenedor Python 3.10..."
+                dockerExecute(
+                    script: this,
+                    dockerImage: 'python:3.10'
+                ) {
+                    sh '''
+                        echo "=== Workspace en contenedor ==="
+                        cd sapcloudGAL/python
+                        pwd
+                        ls -la
+
+                        echo "=== Python version ==="
+                        python --version
+
+                        echo "=== Instalando requests ==="
+                        pip install --no-cache-dir requests
+
+                        echo "=== Versión de requests ==="
+                        python -c "import requests; print('requests version:', requests.__version__)"
+                    '''
+                }
+            }
+        }
