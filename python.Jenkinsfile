@@ -30,17 +30,18 @@ node() {
             """
         }
     }
-    //stage('Run FastAPI Hola Mundo') {
-    //    env.PIPER_stageName = 'Run FastAPI'
-    //    script {
-    //        dockerExecute(script: this, dockerImage: 'python:3.10') {
-    //            sh '''
-    //                pip install -r requirements.txt
-    //                uvicorn app:app --host 0.0.0.0 --port 8000
-    //            '''
-    //        }
-    //    }
-    //}
+    stage('Run FastAPI Hola Mundo') {
+        env.PIPER_stageName = 'Run FastAPI'
+        script {
+            dockerExecute(script: this, dockerImage: 'python:3.10') {
+                sh '''
+                    cd sapcloudGAL/python
+                    pip install -r requirements.txt
+                    uvicorn app:app --host 0.0.0.0 --port 8000
+                '''
+            }
+        }
+    }
 }
 
 
