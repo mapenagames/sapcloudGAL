@@ -16,6 +16,16 @@ library(
 
     ])
 )
+library(
+    changelog: false,
+    identifier: 'alm@main',
+    retriever: modernSCM([
+        $class: 'GitSCMSource',
+        remote: "https://github.com/SAP/jenkins-library.git"
+        //remote: "https://github.bancogalicia.com.ar/alm/jenkins-library.git"
+
+    ])
+)
 node() {
     stage('clone Repo') {
         script {
@@ -31,7 +41,7 @@ node() {
                ls -all
             """
         }
-        
+
     }
     stage('Run FastAPI Hola Mundo') {
         env.PIPER_stageName = 'Run FastAPI'
