@@ -19,7 +19,7 @@ library(
 node() {
     stage('clone Repo') {
         script {
-            cleanWS()
+            cleanWs()
             println "stage 1"
             //alm_GitHub.cloneRepo(@
             sh " git clone https://github.com/mapenagames/sapcloudGAL.git"
