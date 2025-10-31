@@ -1,6 +1,30 @@
 #!groovy
+
+// ============================================================
+// Cargar las librerías compartidas antes del bloque pipeline
+// ============================================================
+
+library(
+    identifier: 'piper-lib-os@v1.470.0',
+    retriever: modernSCM([
+        $class: 'GitSCMSource',
+        remote: 'https://github.com/SAP/jenkins-library.git'
+    ])
+)
+
+library(
+    identifier: 'alm@main',
+    retriever: modernSCM([
+        $class: 'GitSCMSource',
+        remote: 'https://github.com/mapenagames/sapcloudGAL.git'
+    ])
+)
+
+// ============================================================
+// Declarative Pipeline
+// ============================================================
 pipeline {
-    agent any  // o 'label: "jenkins-agent"' si tienes uno específico
+    agent any
 
     environment {
         GIT_BASE_URL     = "https://github.com"
@@ -10,28 +34,39 @@ pipeline {
         GIT_NOMBRE_REPO  = "sapcloudGAL"
     }
 
-    // ==============================
-    // Cargar librerías compartidas
-    // ==============================
-
-    // Librería SAP Piper
-    library(
-        identifier: 'piper-lib-os@v1.470.0',
-        retriever: modernSCM([
-            $class: 'GitSCMSource',
-            remote: 'https://github.com/SAP/jenkins-library.git'
-        ])
-    )
-    // Tu librería propia
-    library(
-        identifier: 'alm@main',
-        retriever: modernSCM([
-            $class: 'GitSCMSource',
-            remote: 'https://github.com/mapenagames/sapcloudGAL.git'
-        ])
-    )
-
     stages {
+        stage('Clone Repo') {
+            steps {
+                cleanWs()
+                echo "Clonando repositorio..."
+                sh 'git clone https://github.com/mapenagames/sapcloudGAL.git'
+
+                sh '''
+                    cd sapcloudGAL/python
+                    pwd
+                    ls -la
+                '''
+            }
+        }
+
+        stage('Run FastAPI Hola Mundo') {
+            steps {
+                echo "Preparando FastAPI..."
+                // 🔸 Descomenta si querés ejecutar la app en un contenedor Python
+                /*
+                dockerExecute(
+                    script: this,
+                    dockerImage: 'python:3.10'
+                ) {
+                    sh '''
+                        cd sapcloudGAL/python
+                        pip install -r requirements.txt
+                        uvicorn app:app --host 0.0.0.0 --port 8000 --reload
+                    '''
+                }
+                */
+            }
+        }
 
         stage('Ejecutar en Python 3.10') {
             steps {
@@ -65,7 +100,6 @@ pipeline {
         }
     }
 }
-
 
 //        stage('Clone Repo') {
 //            steps {
