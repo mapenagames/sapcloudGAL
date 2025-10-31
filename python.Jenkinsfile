@@ -1,0 +1,43 @@
+#!groovy
+env.GIT_CRED = "GitHubPusher" //Credenciales
+env.GIT_BASE_URL = "https://github.bancogalicia.com.ar" //URL Git
+env.GIT_API_BASE = "${env.GIT_BASE_URL}/api/v3" 
+env.GIT_BRANCH = "master"
+env.GIT_TAG = ""
+env.GIT_ORG = "alm"
+env.GIT_NOMBRE_REPO = "SAPCLOUD"
+library(
+    changelog: false,
+    identifier: 'piper-lib-os@master',
+    retriever: modernSCM([
+        $class: 'GitSCMSource',
+        //remote: "https://github.com/SAP/jenkins-library.git"
+        remote: "https://github.bancogalicia.com.ar/alm/jenkins-library.git"
+
+    ])
+)
+//https://github.bancogalicia.com.ar/alm/SAPCLOUD.git
+node("all") {
+    stage('clone Repo') {
+        script {
+            alm_GitHub.cloneRepo()
+            sh 'pwd'
+            sh 'ls -all'
+        }
+    }
+    stage('Run FastAPI Hola Mundo') {
+        env.PIPER_stageName = 'Run FastAPI'
+        script {
+            dockerExecute(script: this, dockerImage: 'python:3.10') {
+                sh '''
+                    pip install -r requirements.txt
+                    uvicorn app:app --host 0.0.0.0 --port 8000
+                '''
+            }
+        }
+    }
+}
+
+
+
+

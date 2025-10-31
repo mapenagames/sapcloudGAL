@@ -1,0 +1,49 @@
+#!groovy
+env.GIT_CRED = "GitHubPusher" //Credenciales
+env.GIT_BASE_URL = "https://github.bancogalicia.com.ar" //URL Git
+library(
+    changelog: false,
+    identifier: 'piper-lib-os@master',
+    retriever: modernSCM(
+        [
+            $class: 'GitSCMSource',
+            credentialsId: env.GIT_CRED,
+            remote: "https://github.bancogalicia.com.ar/alm/jenkins-library.git"
+            //remote: "https://github.com/SAP/jenkins-library.git"
+            //traits: [
+            //    [ $class: 'jenkins.plugins.git.traits.BranchDiscoveryTrait' ],
+            //    [ $class: 'CleanAfterCheckoutTrait']
+            //]
+        ]
+    )
+)
+library(
+    changelog: false,
+    identifier: 'alm@master',
+    retriever: modernSCM(
+        [
+            $class: 'GitSCMSource',
+            credentialsId: env.GIT_CRED,
+            remote: "https://github.bancogalicia.com.ar/alm/SAPCLOUD",
+            traits: [
+                [ $class: 'jenkins.plugins.git.traits.BranchDiscoveryTrait' ],
+                [ $class: 'CleanAfterCheckoutTrait']
+            ]
+        ]
+    )
+)
+//
+
+
+node ("all"){
+    stage('Build Node.js App') {
+        env.PIPER_stageName = 'Build'
+        alm_Utilidades.messages("test carga libreria custom","info")
+        println "env.PIPER_stageName:${env.PIPER_stageName}"
+
+        script {
+            npmExecute script: this, dockerImage: 'node:18'
+        }
+    }
+}
+        
