@@ -6,14 +6,24 @@ env.GIT_BRANCH = "main"
 env.GIT_TAG = ""
 env.GIT_ORG = "mapenagames"
 env.GIT_NOMBRE_REPO = "sapcloudGAL"
+//library(
+//    changelog: false,
+//    identifier: 'piper-lib-os@master',
+//    retriever: modernSCM([
+//        $class: 'GitSCMSource',
+//        remote: "https://github.com/SAP/jenkins-library.git"
+//        //remote: "https://github.bancogalicia.com.ar/alm/jenkins-library.git"
+//
+//    ])
+//)
+
+
 library(
     changelog: false,
-    identifier: 'piper-lib-os@master',
+    identifier: 'piper-lib-os@v1.470.0',
     retriever: modernSCM([
         $class: 'GitSCMSource',
         remote: "https://github.com/SAP/jenkins-library.git"
-        //remote: "https://github.bancogalicia.com.ar/alm/jenkins-library.git"
-
     ])
 )
 
