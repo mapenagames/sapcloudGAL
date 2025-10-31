@@ -20,7 +20,8 @@ node() {
     stage('clone Repo') {
         script {
             println "stage 1"
-            alm_GitHub.cloneRepo()
+            //alm_GitHub.cloneRepo(@
+            sh " git clone https://github.com/mapenagames/sapcloudGAL.git"
             sh 'pwd'
             sh 'ls -all'
         }
