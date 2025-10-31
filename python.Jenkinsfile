@@ -51,6 +51,21 @@ pipeline {
 
         stage('Ejecutar en Python 3.10') {
             steps {
+                withDockerContainer(image: 'python:3.10') {
+                    sh '''
+                        cd sapcloudGAL/python
+                        pwd
+                        ls -all
+                        python --version
+                        pip install requests
+                        python -c "import requests; print(requests.__version__)"
+                    '''
+                }
+            }
+        }
+
+        stage('Ejecutar en Python 3.10  b') {
+            steps {
                 echo "Iniciando contenedor Python 3.10..."
                 dockerExecute(
                     script: this,
