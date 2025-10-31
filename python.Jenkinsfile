@@ -10,6 +10,12 @@ library(
 piperPipeline {
     agent any
     stages {
+        stage('Setup Piper') {
+            steps {
+                // Inicializa el entorno de Piper
+                setupCommonPipelineEnvironment script: this
+            }
+        }
         stage('Ejecutar') {
             steps {
                 dockerExecute(script: this, dockerImage: 'python:3.10') {
