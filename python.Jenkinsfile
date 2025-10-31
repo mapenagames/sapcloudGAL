@@ -22,7 +22,6 @@ pipeline {
             remote: 'https://github.com/SAP/jenkins-library.git'
         ])
     )
-
     // Tu librería propia
     library(
         identifier: 'alm@main',
