@@ -1,32 +1,21 @@
-#!groovy
-
-// ¡NO uses library(...) aquí!
-// La librería ya está cargada como Global Library
-
-piperPipeline {
+pipeline {
     agent any
-
     stages {
-        stage('Ejecutar Python') {
+        stage('Setup') {
             steps {
-                dockerExecute(
-                    script: this,
-                    dockerImage: 'python:3.10'
-                ) {
-                    sh '''
-                        echo "=== Python en contenedor ==="
-                        python --version
-                        pip install --no-cache-dir requests
-                        python -c "import requests; print('requests:', requests.__version__)"
-                    '''
-                }
+                library identifier: 'piper-lib-os@v1.470.0', retriever: modernSCM([
+                    $class: 'GitSCMSource',
+                    remote: 'https://github.com/SAP/jenkins-library.git'
+                ])
+                setupCommonPipelineEnvironment script: this
             }
         }
-    }
-
-    post {
-        always {
-            echo "Pipeline finalizado."
+        stage('Ejecutar') {
+            steps {
+                dockerExecute(script: this, dockerImage: 'python:3.10') {
+                    sh 'python --version'
+                }
+            }
         }
     }
 }
