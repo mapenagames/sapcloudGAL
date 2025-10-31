@@ -10,22 +10,35 @@ pipeline {
         GIT_NOMBRE_REPO  = "sapcloudGAL"
     }
 
-    // Cargar librerías SAP Piper y tu propia librería
-    library(
-        identifier: 'piper-lib-os@v1.470.0',
-        retriever: modernSCM([ remote: 'https://github.com/SAP/jenkins-library.git' ])
-    )
+    // ==============================
+    // Cargar librerías compartidas
+    // ==============================
 
-    library(
-        identifier: 'alm@main',
-        retriever: modernSCM([ remote: 'remote: "https://github.com/mapenagames/sapcloudGAL"' ])
-    )
+    libraries {
+        library(
+            identifier: 'piper-lib-os@v1.470.0',
+            retriever: modernSCM([
+                $class: 'GitSCMSource',
+                remote: 'https://github.com/SAP/jenkins-library.git'
+            ])
+        )
+
+        library(
+            identifier: 'alm@main',
+            retriever: modernSCM([
+                $class: 'GitSCMSource',
+                remote: 'https://github.com/mapenagames/sapcloudGAL.git'
+            ])
+        )
+    }
+
     stages {
         stage('Clone Repo') {
             steps {
                 cleanWs()
                 echo "Clonando repositorio..."
                 sh 'git clone https://github.com/mapenagames/sapcloudGAL.git'
+
                 sh '''
                     cd sapcloudGAL/python
                     pwd
@@ -37,7 +50,7 @@ pipeline {
         stage('Run FastAPI Hola Mundo') {
             steps {
                 echo "Preparando FastAPI..."
-                // Descomenta para ejecutar
+                // 🔸 Descomenta si querés ejecutar la app en un contenedor Python
                 /*
                 dockerExecute(
                     script: this,
