@@ -1,6 +1,9 @@
 #!groovy
 
-// Cargar librerías
+// ============================================================
+// Cargar las librerías compartidas antes del bloque pipeline
+// ============================================================
+
 library(
     identifier: 'piper-lib-os@v1.470.0',
     retriever: modernSCM([
@@ -16,9 +19,10 @@ library(
         remote: 'https://github.com/mapenagames/sapcloudGAL.git'
     ])
 )
-
-// Usa piperPipeline en lugar de pipeline { }
-piperPipeline {
+// ============================================================
+// Declarative Pipeline
+// ============================================================
+pipeline {
     agent any
 
     environment {
@@ -38,18 +42,18 @@ piperPipeline {
                     dockerImage: 'python:3.10'
                 ) {
                     sh '''
-                        echo "=== Workspace ==="
+                        echo "=== Workspace en contenedor ==="
                         pwd
                         ls -la
 
-                        echo "=== Python ==="
+                        echo "=== Python version ==="
                         python --version
 
                         echo "=== Instalando requests ==="
                         pip install --no-cache-dir requests
 
-                        echo "=== Versión ==="
-                        python -c "import requests; print('requests:', requests.__version__)"
+                        echo "=== Versión de requests ==="
+                        python -c "import requests; print('requests version:', requests.__version__)"
                     '''
                 }
             }
@@ -58,8 +62,10 @@ piperPipeline {
 
     post {
         always {
-            echo "Pipeline finalizado."
-            // cleanWs()
+            script {
+                println "fin"
+            //cleanWs()
+            }
         }
     }
 }
