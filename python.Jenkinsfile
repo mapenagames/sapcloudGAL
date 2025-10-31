@@ -7,32 +7,15 @@ library(
         remote: 'https://github.com/SAP/jenkins-library.git'
     ])
 )
-pipeline {
+piperPipeline {
     agent any
     stages {
-        stage('Setup Piper') {
+        stage('Ejecutar') {
             steps {
-                // Inicializa el entorno de Piper
-                setupCommonPipelineEnvironment script: this
-            }
-        }
-        stage('Ejecutar en Python 3.10') {
-            steps {
-                withDockerContainer(image: 'python:3.10') {
-                    sh '''
-                        pwd
-                        ls -all
-                        python --version
-                        pip install requests
-                        python -c "import requests; print(requests.__version__)"
-                    '''
+                dockerExecute(script: this, dockerImage: 'python:3.10') {
+                    sh 'python --version'
                 }
             }
-        }
-    }
-    post {
-        always {
-            echo "Pipeline finalizado."
         }
     }
 }
