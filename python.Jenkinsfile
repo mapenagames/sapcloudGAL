@@ -62,7 +62,10 @@ pipeline {
 
     post {
         always {
+            script {
+            println "fin"
             //cleanWs()
+            }
         }
     }
 }
