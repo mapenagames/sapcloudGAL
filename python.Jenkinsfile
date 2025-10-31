@@ -62,7 +62,7 @@ node() {
     }
     stage('Ejecutar en Python 3.10') {
         script {
-            println "docker execute"
+            println "docker execute2"
             dockerExecute(
                 script: this,
                 dockerImage: 'python:3.10'
