@@ -34,20 +34,6 @@ pipeline {
     }
 
     stages {
-        stage('Clone Repo') {
-            steps {
-                cleanWs()
-                echo "Clonando repositorio..."
-                sh 'git clone https://github.com/mapenagames/sapcloudGAL.git'
-
-                sh '''
-                    cd sapcloudGAL/python
-                    pwd
-                    ls -la
-                '''
-            }
-        }
-
         stage('Ejecutar en Python 3.10') {
             steps {
                 echo "Iniciando contenedor Python 3.10..."
@@ -76,7 +62,7 @@ pipeline {
 
     post {
         always {
-            cleanWs()
+            //cleanWs()
         }
     }
 }
