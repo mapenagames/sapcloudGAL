@@ -16,16 +16,19 @@ library(
 
     ])
 )
+
 library(
     changelog: false,
     identifier: 'alm@main',
-    retriever: modernSCM([
-        $class: 'GitSCMSource',
-        remote: "https://github.com/SAP/jenkins-library.git"
-        //remote: "https://github.bancogalicia.com.ar/alm/jenkins-library.git"
-
-    ])
+    retriever: modernSCM(
+        [
+            $class: 'GitSCMSource',
+            //credentialsId: env.GIT_CRED,
+            remote: "https://github.com/mapenagames/sapcloudGAL"
+        ]
+    )
 )
+
 node() {
     stage('clone Repo') {
         script {
